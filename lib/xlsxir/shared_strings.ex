@@ -1,29 +1,32 @@
 defmodule Xlsxir.SharedStrings do
+  use GenServer
   @moduledoc """
   Hold onto shared strings xml for parsing
   """
   @doc """
   SharedStrings struct
   """
-  defstruct  xml: "", strings: %{}
-  @type t :: %__MODULE__{xml: String.t, strings: map}
-  use GenServer
+  defstruct  xml: "", parsed: false, count: 0,
+             unique_count: 0, strings: []
+
+  @type t :: %__MODULE__{xml: String.t, parsed: boolean, count: integer,
+                        unique_count: integer, strings: list}
 
 
   def start_link(args) do
-    GenServer.start_link(__MODULE__, %Xlsxir.SharedStrings{xml: args[:xml]}, name: __MODULE__)
+    GenServer.start_link(__MODULE__, %__MODULE__{xml: args[:xml]}, name: __MODULE__)
   end
 
+  # can do parsing here, call back immediatly affter start link, have xml in state
   def init(state) do
     {:ok, state}
   end
 
-  def get_handle() do
-    GenServer.call(__MODULE__, :zip)
+  def xml() do
+    GenServer.call(__MODULE__, :xml)
   end
 
-  def handle_call(:zip, _from, %{zip: zip} = state) do
-    {:reply, zip, state}
+  def handle_call(:xml, _from, %__MODULE__{xml: xml} = state) do
+    {:reply, xml, state}
   end
-
 end
