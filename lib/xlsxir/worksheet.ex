@@ -11,13 +11,15 @@ defmodule Xlsxir.Worksheet do
 
   use GenServer
 
-  def init(args) do
-    {:ok, args}
-  end
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args[:ws])
   end
+
+  def init(args) do
+    {:ok, args}
+  end
+
 
   @doc """
   Returns just the name of the worksheet

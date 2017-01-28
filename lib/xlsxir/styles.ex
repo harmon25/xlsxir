@@ -26,8 +26,8 @@ defmodule Xlsxir.Styles do
     {:ok, state}
   end
 
-  def xml() do
-    GenServer.call(__MODULE__, :xml)
+  def xml(pid) do
+    GenServer.call(pid, :xml)
   end
 
   def handle_call(:xml, _from, %__MODULE__{xml: xml} = state) do

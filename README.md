@@ -7,7 +7,7 @@ Supervised GenServers for each sheet!
 # path for excel file
 f = Path.join(:code.priv_dir(:xlsxir), "test_workbook.xlsx")
 # load workbook
-{:ok, workbook_pid} = Xlsxir.load(f)
+Xlsxir.load(f)
 # view sheet info, to be used for further processing
 Xlsxir.Workbook.sheets()
 [%Xlsxir.Sheet{data: [], id: 3, name: "sheet with space",
