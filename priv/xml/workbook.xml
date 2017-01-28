@@ -10,6 +10,10 @@
     <sheet name="AnotherSheet" sheetId="2" r:id="rId2"/>
     <sheet name="sheet with space" sheetId="3" r:id="rId3"/>
   </sheets>
+  <definedNames>
+    <definedName name="test_range">FirstSheet!$A$1:$F$3</definedName>
+    <definedName name="test_range2">AnotherSheet!$A$2:$D$3</definedName>
+  </definedNames>
   <calcPr calcId="171027"/>
   <extLst>
     <ext uri="{140A7094-0E35-4892-8432-C4D2E57EDEB5}" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main">

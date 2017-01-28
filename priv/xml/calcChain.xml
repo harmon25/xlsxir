@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <c r="N2" i="1" l="1"/>
+  <c r="N3" i="1"/>
+  <c r="N4" i="1"/>
+  <c r="N5" i="1"/>
+  <c r="N6" i="1"/>
+  <c r="N7" i="1"/>
+  <c r="N1" i="1"/>
+  <c r="I2" i="1"/>
+  <c r="I3" i="1"/>
+  <c r="I4" i="1"/>
+  <c r="I5" i="1"/>
+  <c r="I1" i="1"/>
   <c r="H3" i="1" l="1"/>
   <c r="H2" i="1"/>
   <c r="H4" i="1"/>

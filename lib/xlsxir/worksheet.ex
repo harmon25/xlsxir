@@ -13,7 +13,9 @@ defmodule Xlsxir.Worksheet do
 
 
   def start_link(args) do
-    GenServer.start_link(__MODULE__, args[:ws])
+    IO.puts "SHEET ARGS!"
+    IO.inspect args
+    GenServer.start_link(__MODULE__, args)
   end
 
   def init(args) do

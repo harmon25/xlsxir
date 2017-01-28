@@ -3,7 +3,7 @@
   <dimension ref="A1:E13"/>
   <sheetViews>
     <sheetView workbookViewId="0">
-      <selection sqref="A1:E13"/>
+      <selection activeCell="X4" sqref="X4"/>
     </sheetView>
   </sheetViews>
   <sheetFormatPr defaultRowHeight="15" x14ac:dyDescent="0.25"/>

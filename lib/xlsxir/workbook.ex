@@ -1,4 +1,9 @@
 defmodule Xlsxir.Workbook do
+  alias Xlsxir.{Worksheet, Styles, SharedStrings, Zip}
+  import SweetXml
+
+  @xlsxir_reg :xlsxir_registry
+
   @moduledoc """
   Documentation for Xlsxir.Worksheet
   """
@@ -17,7 +22,21 @@ defmodule Xlsxir.Workbook do
 
 
   def init(wb) do
-    {:ok, wb}
+    [{wb_sup, _}] = Registry.lookup(@xlsxir_reg, wb.name)
+
+    sheets =
+     wb.xml
+     |> xpath(~x"//sheets/./sheet"l, name: ~x"//./@name"s, id: ~x"//./@sheetId"i, rel_id: ~x"//./@r:id"s)
+     |> Enum.map(fn s ->
+
+        ws = struct(%Worksheet{path: String.to_charlist("worksheets/sheet#{s.id}.xml")}, s)
+        #Supervisor.start_child(wb_sup, Supervisor.Spec.worker(Worksheet, [ws], [id: ws.id]))
+        ws
+     end)
+
+     #Xlsxir.Workbook.Supervisor.launch_sheets(wb_sup, sheets)
+
+    {:ok, %__MODULE__{wb | sheets: sheets} }
   end
   @doc """
   Returns just the name of the worksheet
@@ -29,6 +48,7 @@ defmodule Xlsxir.Workbook do
   def name(pid) do
     GenServer.call(pid, :name)
   end
+
 
   @doc """
   Returns sheet a Xlsxir.Workbook struct
