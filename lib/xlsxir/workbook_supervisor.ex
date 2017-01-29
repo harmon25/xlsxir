@@ -3,7 +3,7 @@
   @moduledoc """
   Workbook supervisor.
   Supervises worksheet processes to hopefully allow for parallel xml parsing of
-  sheets since they are each in their own process
+  sheets and other xmls since they are each in their own process
   """
 
   use Supervisor
@@ -12,8 +12,6 @@
 
   @book_files [book: 'xl/workbook.xml', styles: 'xl/styles.xml', strings: 'xl/sharedStrings.xml']
 
-  # could do more here, pass processed args as args to init,
-  # rather than doing everything in init.
   def start_link(args) do
     Supervisor.start_link(__MODULE__, [path: args[:path], name: args[:name]])
   end
@@ -21,11 +19,7 @@
   def init(args) do
     path = Keyword.get(args, :path, nil)
     handle = Zip.new_handle(path, args[:name])
-    # returns a zip handle to be used by future calls, cant store in supervisor,
-    # going to stash the handle in another process named Xlsxir.Zip
 
-    #{:ok, handle} = :zip.zip_open(String.to_charlist(xlsx_file)  ,[:memory])
-    # reads the xml into string `book_xml`
     {:ok, {_file_name, book_xml }} = :zip.zip_get(@book_files[:book], handle)
 
     sheets =
@@ -34,11 +28,9 @@
      |> Enum.map(fn s ->
       struct(%Worksheet{path: String.to_charlist("xl/worksheets/sheet#{s.id}.xml")}, s) end)
 
-
     names =
       book_xml
       |> xpath(~x"//definedNames/./definedName"l, name: ~x"//./@name"s, range: ~x"//./text()"s)
-      |> IO.inspect
 
     Registry.register(:xlsxir_registry, args[:name], %Workbook{name: args[:name], xml: book_xml, file_path: path, sheets: sheets})
 
@@ -58,7 +50,7 @@
      supervise(book_workers , strategy: :one_for_one)
   end
 
-
+ # TODO 
   def sheets() do
     :ok
   end

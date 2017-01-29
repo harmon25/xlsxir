@@ -25,12 +25,12 @@ defmodule Xlsxir.Worksheet do
 
     %{handle: handle} = Xlsxir.Zip.get_handle(args[:wb])
     {:ok, {_file_name, sheet_xml }} = :zip.zip_get(sheet.path, handle)
-   dimensions =
+   [start_sheet, end_sheet] =
      sheet_xml
-     |> xpath(~x"//dimension"e, ref: ~x"//./@ref"s)
-     |> IO.inspect
+     |> xpath(~x"//dimension/@ref"s)
+     |> String.split(":")
 
-    {:ok, {args[:wb], sheet}}
+    {:ok, {args[:wb], %__MODULE__{sheet | dimension: {start_sheet, end_sheet}}}}
   end
 
 
