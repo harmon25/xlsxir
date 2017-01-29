@@ -1,5 +1,6 @@
 defmodule Xlsxir.Worksheet do
   import SweetXml
+  alias Xlsxir.{Parsers}
 
   @moduledoc """
   Documentation for Xlsxir.Worksheet
@@ -20,17 +21,14 @@ defmodule Xlsxir.Worksheet do
     GenServer.start_link(__MODULE__, args)
   end
 
-  def init(args) do
-    sheet = args[:sheet]
-
-    %{handle: handle} = Xlsxir.Zip.get_handle(args[:wb])
+  # expecting :sheet struct and :wb name
+  def init([sheet: sheet, wb: wb]) do
+    %{handle: handle} = Xlsxir.Zip.get_handle(wb)
     {:ok, {_file_name, sheet_xml }} = :zip.zip_get(sheet.path, handle)
-   [start_sheet, end_sheet] =
-     sheet_xml
-     |> xpath(~x"//dimension/@ref"s)
-     |> String.split(":")
 
-    {:ok, {args[:wb], %__MODULE__{sheet | dimension: {start_sheet, end_sheet}}}}
+    [start_sheet, end_sheet] = Parsers.worksheet_dimensions(sheet_xml)
+
+    {:ok, {wb, %__MODULE__{sheet | dimension: {start_sheet, end_sheet}}}}
   end
 
 

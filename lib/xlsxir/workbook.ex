@@ -8,7 +8,7 @@ defmodule Xlsxir.Workbook do
   Workbook struct
   """
   defstruct file_path: nil, sheets: [], defined_names: [], name: nil, xml: nil
-  @type t :: %__MODULE__{file_path: String.t, sheets: list, name: String.t, xml: String.t}
+  @type t :: %__MODULE__{file_path: String.t, sheets: list, defined_names: list, name: String.t, xml: String.t}
 
 
 end

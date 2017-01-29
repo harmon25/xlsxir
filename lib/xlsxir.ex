@@ -3,7 +3,7 @@ defmodule Xlsxir do
   Functions for manipulating Xlsxir.Application supervision tree
   """
   @xlsxir_reg :xlsxir_registry
-  alias Xlsxir.{Workbook, Worksheet}
+  alias Xlsxir.{Worksheet}
 
 
 
@@ -12,7 +12,7 @@ defmodule Xlsxir do
 
   ## Examples
       iex> f = Path.join(:code.priv_dir(:xlsxir), "test_workbook.xlsx")
-      iex> {:ok, workbook} = Xlsxir.load(f)
+      iex> {:ok, {workbook, pid}} = Xlsxir.load(f)
 
   """
   def load(workbook) do
@@ -21,7 +21,7 @@ defmodule Xlsxir do
     sheet_super = get_sheet_super(name)
     {pid, wb} = get_wb(name)
     Enum.each(wb.sheets, &Xlsxir.Application.launch_worksheet(sheet_super, &1, name))
-    {:ok, name}
+    {:ok, {name, pid}}
   end
 
 

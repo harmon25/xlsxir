@@ -16,15 +16,17 @@ defmodule Xlsxir.Styles do
                          cell_styles: list,table_styles: list}
 
 
-  def start_link(args) do
+  def start_link([xml: _xml, wb: _wb] = args) do
     GenServer.start_link(__MODULE__, args)
   end
 
   # can do parsing here, call back immediatly affter start link, have xml in state
-  def init(args) do
-    Registry.register(:xlsxir_registry, args[:wb], "styles")
+  def init([xml: xml, wb: wb]) do
+    # register under wbX key
+    Registry.register(:xlsxir_registry, wb, "styles")
 
-    {:ok, %__MODULE__{xml: args[:xml]}}
+    # pass xml through to state
+    {:ok, %__MODULE__{xml: xml}}
   end
 
   def xml(pid) do

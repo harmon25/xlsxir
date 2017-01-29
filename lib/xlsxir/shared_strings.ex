@@ -13,15 +13,17 @@ defmodule Xlsxir.SharedStrings do
                         unique_count: integer, strings: list}
 
 
-  def start_link(args) do
-    GenServer.start_link(__MODULE__,args)
+  def start_link([xml: _xml, wb: _wb] = args) do
+    GenServer.start_link(__MODULE__, args)
   end
 
   # can do parsing here, call back immediatly affter start link, have xml in state
-  def init(args) do
+  def init([xml: xml, wb: wb]) do
     # register under workbook key
-    Registry.register(:xlsxir_registry, args[:wb], "strings")
-    {:ok, %__MODULE__{xml: args[:xml]}}
+    Registry.register(:xlsxir_registry, wb, "strings")
+
+    # pass xml through to state
+    {:ok, %__MODULE__{xml: xml}}
   end
 
   def xml(pid) do
