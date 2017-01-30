@@ -10,16 +10,16 @@ end
 
  # TODO
  # http://stackoverflow.com/questions/19153462/get-excel-style-column-names-from-column-number
+
 def num_to_excel(row, col) do
   #numeric = mod(num, 26)
-  col_num_to_letter(col, "")
+  col_num_to_letter(col) <> Integer.to_string(row)
 end
 
-
 # first run
-def col_num_to_letter(c, result) when is_integer(c) do
+def col_num_to_letter(c) do
   {col, rem} = divmod(c)
-  col_num_to_letter({col,rem}, result)
+  col_num_to_letter({col,rem}, "")
 end
 
 # keep looping on more c > 0
@@ -35,9 +35,9 @@ def col_num_to_letter({c,_r}, result) do
   #res = result <> Enum.fetch!(@letters_w, c-1)
 end
 
-
 def divmod(col, denominator \\ 26) do
-  {Integer.floor_div(col-1, denominator), Integer.mod(col-1, denominator) }
+  c = col - 1
+  {Integer.floor_div(c, denominator), Integer.mod(c, denominator) }
   |> IO.inspect
 end
 
